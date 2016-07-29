@@ -21,7 +21,7 @@ class TestEventPlayer(unittest.TestCase):
         # Setup an event store, using Python objects.
         event_store = EventStore(stored_event_repo=PythonObjectsStoredEventRepository())
 
-        # Store example events.
+        # Store Allocation Source events.
         event1 = AllocationSource.Created(entity_id='entity1', a=1, b=2)
         event_store.append(event1)
         event2 = AllocationSource.Created(entity_id='entity2', a=2, b=4)
@@ -46,7 +46,7 @@ class TestEventPlayer(unittest.TestCase):
         self.assertEqual(event_player.replay_events('entity3'), None)
 
         # Check it works for "short" entities (should be faster, but the main thing is that it still works).
-        # - just use a trivial mutate that always instantiates the 'Example'.
+        # - just use a trivial mutate that always instantiates the 'AllocationSource'.
         event5 = AllocationSource.AttributeChanged(entity_id='entity1', entity_version=1, name='a', value=10)
         event_store.append(event5)
 

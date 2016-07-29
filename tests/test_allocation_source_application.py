@@ -1,4 +1,5 @@
-from allocation_source.model.allocation_source import register_new_example, AllocationSource, AllocationSourceRepository
+from allocation_source.model.allocation_source import register_new_allocation_source, AllocationSource, \
+    AllocationSourceRepository
 from eventsourcing.application.base import EventSourcingApplication
 from eventsourcing.application.with_pythonobjects import EventSourcingWithPythonObjects
 from eventsourcing.application.with_sqlalchemy import EventSourcingWithSQLAlchemy
@@ -19,10 +20,10 @@ class AllocationSourceRepo(EventSourcedRepository, AllocationSourceRepository):
 class AllocationSourceApplication(EventSourcingApplication):
     def __init__(self, **kwargs):
         super(AllocationSourceApplication, self).__init__(**kwargs)
-        self.example_repo = AllocationSourceRepo(self.event_store)
+        self.allocation_source_repo = AllocationSourceRepo(self.event_store)
 
-    def register_new_example(self, a, b):
-        return register_new_example(a=a, b=b)  # This is weird.
+    def register_new_allocation_source(self, a, b):
+        return register_new_allocation_source(a=a, b=b)  # This is weird.
 
 
 class AllocationSourceApplicationWithSQLAlchemy(EventSourcingWithSQLAlchemy, AllocationSourceApplication):
@@ -59,24 +60,24 @@ class AllocationSourceApplicationTestCase(AbstractTestCase):
         self.assertIsInstance(self.app.persistence_subscriber, PersistenceSubscriber)
         self.assertEqual(self.app.persistence_subscriber.event_store, self.app.event_store)
 
-        # Check there's an example repository.
-        self.assertIsInstance(self.app.example_repo, AllocationSourceRepo)
+        # Check there's an Allocation Source repository.
+        self.assertIsInstance(self.app.allocation_source_repo, AllocationSourceRepo)
 
-        # Register a new example.
-        example1 = self.app.register_new_example(a=10, b=20)
-        self.assertIsInstance(example1, AllocationSource)
+        # Register a new Allocation Source.
+        allocation_source1 = self.app.register_new_allocation_source(a=10, b=20)
+        self.assertIsInstance(allocation_source1, AllocationSource)
 
-        # Check the example is available in the repo.
-        entity1 = self.app.example_repo[example1.id]
+        # Check the Allocation Source is available in the repo.
+        entity1 = self.app.allocation_source_repo[allocation_source1.id]
         self.assertEqual(10, entity1.a)
         self.assertEqual(20, entity1.b)
-        self.assertEqual(example1, entity1)
+        self.assertEqual(allocation_source1, entity1)
 
         # Change attribute values.
         entity1.a = 100
 
         # Check the new value is available in the repo.
-        entity1 = self.app.example_repo[example1.id]
+        entity1 = self.app.allocation_source_repo[allocation_source1.id]
         self.assertEqual(100, entity1.a)
 
 

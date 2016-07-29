@@ -7,7 +7,7 @@ from eventsourcing.domain.model.events import publish, DomainEvent
 
 class AllocationSource(EventSourcedEntity):
     """
-    An example event sourced domain model entity.
+    An event sourced domain model entity for Allocation Sources
     """
 
     __page_size__ = 1000  # Needed to get an event history longer than 10000 in Cassandra.
@@ -49,15 +49,15 @@ class AllocationSource(EventSourcedEntity):
 
     @staticmethod
     def _mutator(event, initial):
-        return example_mutator(event, initial)
+        return allocation_source_mutator(event, initial)
 
 
 @singledispatch
-def example_mutator(event, initial):
+def allocation_source_mutator(event, initial):
     return entity_mutator(event, initial)
 
 
-@example_mutator.register(AllocationSource.Heartbeat)
+@allocation_source_mutator.register(AllocationSource.Heartbeat)
 def heartbeat_mutator(event, self):
     self._validate_originator(event)
     assert isinstance(self, AllocationSource), self
@@ -70,9 +70,9 @@ class AllocationSourceRepository(EntityRepository):
     pass
 
 
-def register_new_example(a, b):
+def register_new_allocation_source(a, b):
     """
-    Factory method for example entities.
+    Factory method for Allocation Source entities.
 
     :rtype: AllocationSource
     """
