@@ -1,3 +1,4 @@
 eventsourcing
 sqlalchemy
 mock
+pytest
