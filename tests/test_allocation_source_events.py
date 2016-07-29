@@ -1,10 +1,11 @@
 import unittest
 
-from allocation_source.model.allocation_source import AllocationSource
 from eventsourcing.domain.model.events import assert_event_handlers_empty
 from eventsourcing.infrastructure.event_player import EventPlayer
 from eventsourcing.infrastructure.event_store import EventStore
 from eventsourcing.infrastructure.stored_events.python_objects_stored_events import PythonObjectsStoredEventRepository
+
+from atmo_eventsourcing.domain.model.allocation_source import AllocationSource
 
 
 class TestEventPlayer(unittest.TestCase):

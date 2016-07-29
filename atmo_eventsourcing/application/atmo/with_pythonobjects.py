@@ -1,0 +1,7 @@
+from eventsourcing.application.with_pythonobjects import EventSourcingWithPythonObjects
+
+from atmo_eventsourcing.application.atmo.base import AtmoEventSourcingApplication
+
+
+class AtmoEventSourcingApplicationWithPythonObjects(EventSourcingWithPythonObjects, AtmoEventSourcingApplication):
+    pass

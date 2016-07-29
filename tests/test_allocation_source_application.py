@@ -1,53 +1,29 @@
-from allocation_source.model.allocation_source import register_new_allocation_source, AllocationSource, \
-    AllocationSourceRepository
-from eventsourcing.application.base import EventSourcingApplication
-from eventsourcing.application.with_pythonobjects import EventSourcingWithPythonObjects
-from eventsourcing.application.with_sqlalchemy import EventSourcingWithSQLAlchemy
-from eventsourcing.infrastructure.event_sourced_repo import EventSourcedRepository
 from eventsourcing.infrastructure.event_store import EventStore
 from eventsourcing.infrastructure.persistence_subscriber import PersistenceSubscriber
 from eventsourcing.infrastructure.stored_events.base import StoredEventRepository
 from eventsourcingtests.test_stored_events import AbstractTestCase
 
-
-class AllocationSourceRepo(EventSourcedRepository, AllocationSourceRepository):
-    """
-    Event sourced repository for the AllocationSource domain model entity.
-    """
-    domain_class = AllocationSource
-
-
-class AllocationSourceApplication(EventSourcingApplication):
-    def __init__(self, **kwargs):
-        super(AllocationSourceApplication, self).__init__(**kwargs)
-        self.allocation_source_repo = AllocationSourceRepo(self.event_store)
-
-    def register_new_allocation_source(self, a, b):
-        return register_new_allocation_source(a=a, b=b)  # This is weird.
+from atmo_eventsourcing.application.atmo.base import AtmoEventSourcingApplication
+from atmo_eventsourcing.application.atmo.with_pythonobjects import AtmoEventSourcingApplicationWithPythonObjects
+from atmo_eventsourcing.application.atmo.with_sqlalchemy import AtmoEventSourcingApplicationWithSQLAlchemy
+from atmo_eventsourcing.domain.model.allocation_source import AllocationSource
+from atmo_eventsourcing.infrastructure.event_sourced_repos.allocation_source_repo import AllocationSourceRepo
 
 
-class AllocationSourceApplicationWithSQLAlchemy(EventSourcingWithSQLAlchemy, AllocationSourceApplication):
-    pass
-
-
-class AllocationSourceApplicationWithPythonObjects(EventSourcingWithPythonObjects, AllocationSourceApplication):
-    pass
-
-
-class AllocationSourceApplicationTestCase(AbstractTestCase):
+class AtmoEventSourcingApplicationTestCase(AbstractTestCase):
     def setUp(self):
-        super(AllocationSourceApplicationTestCase, self).setUp()
+        super(AtmoEventSourcingApplicationTestCase, self).setUp()
         self.app = self.create_app()
 
     def create_app(self):
-        raise AllocationSourceApplication()
+        raise AtmoEventSourcingApplication()
 
     def tearDown(self):
         self.app.close()
-        super(AllocationSourceApplicationTestCase, self).tearDown()
+        super(AtmoEventSourcingApplicationTestCase, self).tearDown()
 
     def test(self):
-        assert isinstance(self.app, AllocationSourceApplication)  # For PyCharm...
+        assert isinstance(self.app, AtmoEventSourcingApplication)  # For PyCharm...
 
         # Check there's a stored event repo.
         self.assertIsInstance(self.app.stored_event_repo, StoredEventRepository)
@@ -81,11 +57,11 @@ class AllocationSourceApplicationTestCase(AbstractTestCase):
         self.assertEqual(100, entity1.a)
 
 
-class TestAllocationSourceApplicationWithSQLAlchemy(AllocationSourceApplicationTestCase):
+class TestAtmoEventSourcingApplicationWithSQLAlchemy(AtmoEventSourcingApplicationTestCase):
     def create_app(self):
-        return AllocationSourceApplicationWithSQLAlchemy(db_uri='sqlite:///:memory:')
+        return AtmoEventSourcingApplicationWithSQLAlchemy(db_uri='sqlite:///:memory:')
 
 
-class TestAllocationSourceApplicationWithPythonObjects(AllocationSourceApplicationTestCase):
+class TestAtmoEventSourcingApplicationWithPythonObjects(AtmoEventSourcingApplicationTestCase):
     def create_app(self):
-        return AllocationSourceApplicationWithPythonObjects()
+        return AtmoEventSourcingApplicationWithPythonObjects()
