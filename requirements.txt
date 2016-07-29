@@ -1,4 +1,6 @@
-eventsourcing
+# eventsourcing
+# Use my fixed version of eventsourcing for now:
+[-e] git://github.com/julianpistorius/eventsourcing.git@1dff5f40aaca7c93db365f4aa0f8be7257387494#egg=eventsourcing
 sqlalchemy
 mock
 pytest
