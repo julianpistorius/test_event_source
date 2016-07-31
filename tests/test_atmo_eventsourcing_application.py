@@ -66,21 +66,30 @@ class AtmoEventSourcingApplicationTestCase(AbstractTestCase):
         self.assertIsInstance(self.app.instance_repo, InstanceRepo)
 
         # Register a new Instance.
-        instance1 = self.app.register_new_instance(a=10, b=20)
+        instance1 = self.app.register_new_instance(atmo_id=27216, name='Ubuntu 14.04.2 XFCE Base')
         self.assertIsInstance(instance1, Instance)
 
         # Check the Instance is available in the repo.
         entity1 = self.app.instance_repo[instance1.id]
-        self.assertEqual(10, entity1.a)
-        self.assertEqual(20, entity1.b)
+        self.assertEqual(27216, entity1.atmo_id)
+        self.assertEqual('Ubuntu 14.04.2 XFCE Base', entity1.name)
         self.assertEqual(instance1, entity1)
 
         # Change attribute values.
-        entity1.a = 100
+        # Should fail - this is not a mutable property
+        with self.assertRaises(AttributeError):
+            entity1.atmo_id = 27217
 
         # Check the new value is available in the repo.
         entity1 = self.app.instance_repo[instance1.id]
-        self.assertEqual(100, entity1.a)
+        self.assertEqual(27216, entity1.atmo_id)
+
+        # Change attribute values.
+        entity1.name = 'Ubuntu 16.04.1 XFCE Base'
+
+        # Check the new value is available in the repo.
+        entity1 = self.app.instance_repo[instance1.id]
+        self.assertEqual('Ubuntu 16.04.1 XFCE Base', entity1.name)
 
 
 class TestAtmoEventSourcingApplicationWithSQLAlchemy(AtmoEventSourcingApplicationTestCase):

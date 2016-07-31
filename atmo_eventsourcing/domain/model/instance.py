@@ -24,19 +24,19 @@ class Instance(EventSourcedEntity):
     class Heartbeat(DomainEvent):
         pass
 
-    def __init__(self, a, b, **kwargs):
+    def __init__(self, atmo_id, name, **kwargs):
         super(Instance, self).__init__(**kwargs)
-        self._a = a
-        self._b = b
+        self._atmo_id = atmo_id
+        self._name = name
         self._count_heartbeats = 0
 
-    @mutableproperty
-    def a(self):
-        return self._a
+    @property
+    def atmo_id(self):
+        return self._atmo_id
 
     @mutableproperty
-    def b(self):
-        return self._b
+    def name(self):
+        return self._name
 
     def beat_heart(self):
         self._assert_not_discarded()
@@ -70,14 +70,16 @@ class InstanceRepository(EntityRepository):
     pass
 
 
-def register_new_instance(a, b):
+def register_new_instance(atmo_id, name):
     """
     Factory method for Instance entities.
 
     :rtype: Instance
     """
+    # Instead of generating a random entity_id, maybe we should generate a UUID from the atmo_id passed in?
+    # entity_id = uuid.UUID(int=atmo_id, version=4).hex
     entity_id = uuid.uuid4().hex
-    event = Instance.Created(entity_id=entity_id, a=a, b=b)
+    event = Instance.Created(entity_id=entity_id, atmo_id=atmo_id, name=name)
     entity = Instance.mutate(event=event)
     publish(event=event)
     return entity

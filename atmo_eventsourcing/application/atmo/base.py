@@ -15,5 +15,5 @@ class AtmoEventSourcingApplication(EventSourcingApplication):
     def register_new_allocation_source(self, a, b):
         return register_new_allocation_source(a=a, b=b)
 
-    def register_new_instance(self, a, b):
-        return register_new_instance(a=a, b=b)
+    def register_new_instance(self, atmo_id, name):
+        return register_new_instance(atmo_id=atmo_id, name=name)
