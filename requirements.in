@@ -1,0 +1,5 @@
+# requirements.in
+eventsourcing>=1.0.8
+sqlalchemy
+mock
+pytest
