@@ -1,3 +1,5 @@
+from atmo_eventsourcing.domain.model.instance import Instance
+from atmo_eventsourcing.infrastructure.event_sourced_repos.instance_repo import InstanceRepo
 from eventsourcing.infrastructure.event_store import EventStore
 from eventsourcing.infrastructure.persistence_subscriber import PersistenceSubscriber
 from eventsourcing.infrastructure.stored_events.base import StoredEventRepository
@@ -22,9 +24,7 @@ class AtmoEventSourcingApplicationTestCase(AbstractTestCase):
         self.app.close()
         super(AtmoEventSourcingApplicationTestCase, self).tearDown()
 
-    def test_allocation_source(self):
-        assert isinstance(self.app, AtmoEventSourcingApplication)  # For PyCharm...
-
+    def test_basic_app_stuff(self):
         # Check there's a stored event repo.
         self.assertIsInstance(self.app.stored_event_repo, StoredEventRepository)
 
@@ -35,6 +35,9 @@ class AtmoEventSourcingApplicationTestCase(AbstractTestCase):
         # Check there's a persistence subscriber.
         self.assertIsInstance(self.app.persistence_subscriber, PersistenceSubscriber)
         self.assertEqual(self.app.persistence_subscriber.event_store, self.app.event_store)
+
+    def test_allocation_source(self):
+        assert isinstance(self.app, AtmoEventSourcingApplication)  # For PyCharm...
 
         # Check there's an Allocation Source repository.
         self.assertIsInstance(self.app.allocation_source_repo, AllocationSourceRepo)
@@ -54,6 +57,29 @@ class AtmoEventSourcingApplicationTestCase(AbstractTestCase):
 
         # Check the new value is available in the repo.
         entity1 = self.app.allocation_source_repo[allocation_source1.id]
+        self.assertEqual(100, entity1.a)
+
+    def test_instance(self):
+        assert isinstance(self.app, AtmoEventSourcingApplication)  # For PyCharm...
+
+        # Check there's an Instance repository.
+        self.assertIsInstance(self.app.instance_repo, InstanceRepo)
+
+        # Register a new Instance.
+        instance1 = self.app.register_new_instance(a=10, b=20)
+        self.assertIsInstance(instance1, Instance)
+
+        # Check the Instance is available in the repo.
+        entity1 = self.app.instance_repo[instance1.id]
+        self.assertEqual(10, entity1.a)
+        self.assertEqual(20, entity1.b)
+        self.assertEqual(instance1, entity1)
+
+        # Change attribute values.
+        entity1.a = 100
+
+        # Check the new value is available in the repo.
+        entity1 = self.app.instance_repo[instance1.id]
         self.assertEqual(100, entity1.a)
 
 
