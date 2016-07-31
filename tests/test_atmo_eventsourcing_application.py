@@ -22,7 +22,7 @@ class AtmoEventSourcingApplicationTestCase(AbstractTestCase):
         self.app.close()
         super(AtmoEventSourcingApplicationTestCase, self).tearDown()
 
-    def test(self):
+    def test_allocation_source(self):
         assert isinstance(self.app, AtmoEventSourcingApplication)  # For PyCharm...
 
         # Check there's a stored event repo.
