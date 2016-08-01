@@ -1,14 +1,17 @@
 import datetime
 import unittest
 
-from atmo_eventsourcing.domain.model.instance import register_new_instance, Instance
-from atmo_eventsourcing.infrastructure.event_sourced_repos.instance_repo import InstanceRepo
 from eventsourcing.domain.model.entity import EntityIDConsistencyError, EntityVersionConsistencyError
 from eventsourcing.domain.model.events import DomainEvent, assert_event_handlers_empty, publish
 from eventsourcing.infrastructure.event_store import EventStore
 from eventsourcing.infrastructure.persistence_subscriber import PersistenceSubscriber
 from eventsourcing.infrastructure.stored_events.python_objects_stored_events import PythonObjectsStoredEventRepository
-from eventsourcing.utils.time import utc_timezone, datetime_to_timestamp, uuid_from_timestamp
+from eventsourcing.utils.time import utc_timezone
+
+from atmo_eventsourcing.domain.model.instance import register_new_instance, Instance
+from atmo_eventsourcing.infrastructure.event_sourced_repos.instance_repo import InstanceRepo
+from atmo_eventsourcing.utils.time import datetime_to_timestamp
+from atmo_eventsourcing.utils.time import uuid_from_timestamp
 
 
 class TestInstanceEntity(unittest.TestCase):
