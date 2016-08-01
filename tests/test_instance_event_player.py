@@ -26,11 +26,11 @@ class TestInstanceEventPlayer(unittest.TestCase):
         event_store = EventStore(stored_event_repo=PythonObjectsStoredEventRepository())
 
         # Store Instance events.
-        event1 = Instance.Created(entity_id='entity1', atmo_id=27216, name='Ubuntu 14.04.2 XFCE Base')
+        event1 = Instance.Created(entity_id='entity1', atmo_id=27216, name='Ubuntu 14.04.2 XFCE Base', username='amitj')
         event_store.append(event1)
-        event2 = Instance.Created(entity_id='entity2', atmo_id=27217, name='Ubuntu 15.04.2 XFCE Base')
+        event2 = Instance.Created(entity_id='entity2', atmo_id=27217, name='Ubuntu 15.04.2 XFCE Base', username='amitj')
         event_store.append(event2)
-        event3 = Instance.Created(entity_id='entity3', atmo_id=27218, name='Ubuntu 16.04.2 XFCE Base')
+        event3 = Instance.Created(entity_id='entity3', atmo_id=27218, name='Ubuntu 16.04.2 XFCE Base', username='amitj')
         event_store.append(event3)
         event4 = Instance.Discarded(entity_id='entity3', entity_version=1)
         event_store.append(event4)
@@ -78,7 +78,7 @@ class TestInstanceEventPlayer(unittest.TestCase):
                                    mutate_func=Instance.mutate)
 
         # Create a new entity.
-        registered_instance = register_new_instance(atmo_id=27216, name='Ubuntu 14.04.2 XFCE Base')
+        registered_instance = register_new_instance(atmo_id=27216, name='Ubuntu 14.04.2 XFCE Base', username='amitj')
 
         # Take a snapshot.
         snapshot = take_snapshot(registered_instance, uuid1().hex)
@@ -162,7 +162,7 @@ class TestInstanceEventPlayer(unittest.TestCase):
         self.assertIsNone(snapshot)
 
         # Create a new entity.
-        instance = register_new_instance(atmo_id=27216, name='Ubuntu 14.04.2 XFCE Base')
+        instance = register_new_instance(atmo_id=27216, name='Ubuntu 14.04.2 XFCE Base', username='amitj')
 
         # Take a snapshot with the entity.
         snapshot1 = event_player.take_snapshot(instance.id)

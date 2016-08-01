@@ -66,7 +66,7 @@ class AtmoEventSourcingApplicationTestCase(AbstractTestCase):
         self.assertIsInstance(self.app.instance_repo, InstanceRepo)
 
         # Register a new Instance.
-        instance1 = self.app.register_new_instance(atmo_id=27216, name='Ubuntu 14.04.2 XFCE Base')
+        instance1 = self.app.register_new_instance(atmo_id=27216, name='Ubuntu 14.04.2 XFCE Base', username='amitj')
         self.assertIsInstance(instance1, Instance)
 
         # Check the Instance is available in the repo.
