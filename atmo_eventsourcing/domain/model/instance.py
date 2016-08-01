@@ -1,5 +1,6 @@
 import uuid
 
+from atmo_eventsourcing.utils.time import uuid_from_timestamp
 from eventsourcing.domain.model.entity import EventSourcedEntity, mutableproperty, EntityRepository, entity_mutator, \
     singledispatch
 from eventsourcing.domain.model.events import publish, DomainEvent
@@ -32,7 +33,7 @@ class Instance(EventSourcedEntity):
 
         self._status = 'unknown'
         self._activity = ''
-        self._size = {-1, -1, -1}
+        self._size = {'mem': '-1', 'disk': '-1', 'cpu': '-1'}
         self._count_heartbeats = 0
 
     @property
@@ -71,6 +72,28 @@ class Instance(EventSourcedEntity):
     @staticmethod
     def _mutator(event, initial):
         return instance_mutator(event, initial)
+
+    @staticmethod
+    def change_attribute_conditional(entity, name, value, timestamp=None):
+        """Change an attribute, but only if it's different than the current value.
+
+        :param entity: Instance entity to change
+        :param name: Name of the attribute to change
+        :param value: New value of the attribute
+        :param timestamp: (Optional) The timestamp at which to register the change event.
+        :return: None
+        """
+        current_value = getattr(entity, name, None)
+        if value == current_value:
+            return entity
+        domain_event_id = None
+        if timestamp:
+            domain_event_id = uuid_from_timestamp(timestamp)
+        event = Instance.AttributeChanged(name=name, value=value, entity_id=entity.id, entity_version=entity.version,
+                                          domain_event_id=domain_event_id)
+        new_instance = Instance.mutate(event=event)
+        publish(event)
+        return new_instance
 
 
 @singledispatch
