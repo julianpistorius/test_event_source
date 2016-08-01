@@ -1,5 +1,5 @@
 #allocation_event_source
-[![Build Status](https://travis-ci.org/julianpistorius/test_event_source.svg?branch=wip)](https://travis-ci.org/julianpistorius/test_event_source)
+[![Build Status](https://travis-ci.org/julianpistorius/test_event_source.svg)](https://travis-ci.org/julianpistorius/test_event_source)
 
 A space to try out Event Sourcing things. Probably not interesting for most people.
 
