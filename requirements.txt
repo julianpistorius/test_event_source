@@ -4,13 +4,18 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
+docopt==0.6.2             # via records
 eventsourcing==1.0.8
+fake-factory==0.5.10
 funcsigs==1.0.2           # via mock
+ipaddress==1.0.16         # via fake-factory
 mock==2.0.0
 pbr==1.10.0               # via mock
 py==1.4.31                # via pytest
 pytest==2.9.2
-python-dateutil==2.5.3    # via eventsourcing
+python-dateutil==2.5.3    # via eventsourcing, fake-factory
+records==0.4.3
 singledispatch==3.4.0.3   # via eventsourcing
-six==1.10.0               # via eventsourcing, mock, python-dateutil, singledispatch
+six==1.10.0               # via eventsourcing, fake-factory, mock, python-dateutil, singledispatch
 sqlalchemy==1.0.14
+tablib==0.11.2            # via records

@@ -3,3 +3,5 @@ eventsourcing>=1.0.8
 sqlalchemy
 mock
 pytest
+records
+fake-factory
