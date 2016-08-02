@@ -1,3 +1,5 @@
+import StringIO
+import csv
 import datetime
 import json
 import random
@@ -9,7 +11,7 @@ from eventsourcing.utils.time import utc_timezone
 from faker import Faker
 
 from atmo_cqrs.db import QUERY_SELECT_EVENTS, QUERY_INSERT_EVENT, QUERY_CREATE_TABLE, QUERY_DROP_TABLE
-from atmo_cqrs.tests.test_data import INSTANCE_STATUSES
+from atmo_cqrs.tests.test_data import INSTANCE_STATUSES, STATUS_HISTORY_SIMPLE_TEST_DATA
 from atmo_eventsourcing.utils.time import datetime_to_timestamp
 
 
@@ -41,6 +43,26 @@ class BasicTestCase(unittest.TestCase):
                           timestamp=timestamp,
                           event_topic=event_topic,
                           event_attrs=event_attrs_json)
+        rows = self.db.query(QUERY_SELECT_EVENTS)
+        print(rows.export('csv'))
+
+    def test_simple_data(self):
+        status_history_file_object = StringIO.StringIO(STATUS_HISTORY_SIMPLE_TEST_DATA)
+        reader = csv.DictReader(status_history_file_object)
+        for row in reader:
+            entity_id = row['instance_id']
+            event_id = str(row['ih_id'])
+            timestamp = datetime_to_timestamp(datetime.datetime.now(tz=utc_timezone))
+            event_topic = 'atmosphere.model.instance#Instance.StatusChanged'
+            event_attrs = row
+            event_attrs_json = json.dumps(event_attrs)
+            self.db.query(QUERY_INSERT_EVENT,
+                          entity_id=entity_id,
+                          event_id=event_id,
+                          timestamp=timestamp,
+                          event_topic=event_topic,
+                          event_attrs=event_attrs_json)
+
         rows = self.db.query(QUERY_SELECT_EVENTS)
         print(rows.export('csv'))
 
