@@ -12,9 +12,9 @@ from dateutil.parser import parse
 from eventsourcing.utils.time import utc_timezone
 from faker import Faker
 
-from atmo_cqrs.db import QUERY_SELECT_EVENTS, QUERY_INSERT_EVENT, QUERY_CREATE_TABLE, QUERY_DROP_TABLE, \
+from simple_eventsourcing.db import QUERY_SELECT_EVENTS, QUERY_INSERT_EVENT, QUERY_CREATE_TABLE, QUERY_DROP_TABLE, \
     QUERY_SELECT_EVENTS_BY_EVENT_DATE
-from atmo_cqrs.tests.test_data import INSTANCE_STATUSES, INSTANCE_STATUS_HISTORY_DATA_01, \
+from simple_eventsourcing.tests.test_data import INSTANCE_STATUSES, INSTANCE_STATUS_HISTORY_DATA_01, \
     ALLOCATION_SOURCE_CHANGE_DATA_01
 from atmo_eventsourcing.utils.time import datetime_to_timestamp
 
